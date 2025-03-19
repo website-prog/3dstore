@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Ecommerce Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Modern color scheme */
+:root {
+    --primary: #6a11cb;
+    --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    --secondary: #ff6b6b;
+    --dark: #2c3e50;
+    --light: #f8f9fa;
+    --accent: #00d2ff;
+    --background: #f0f2f5;
+    --card-bg: #ffffff;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background);
+    color: var(--dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    background: var(--primary-gradient);
+    color: var(--light);
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(106, 17, 203, 0.5);
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.logo span {
+    color: var(--secondary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    font-weight: 500;
+    position: relative;
+    transition: var(--transition);
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--primary);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background: var(--primary-gradient);
+    transition: var(--transition);
+}
+
+.nav-links a:hover::after, .nav-links a.active::after {
+    width: 100%;
+}
+
+.nav-icons {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.icon {
+    font-size: 1.3rem;
+    transition: var(--transition);
+}
+
+.icon:hover {
+    color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.menu-btn {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5rem 5%;
+    min-height: 80vh;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6)), url('https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?ixlib=rb-1.2.1&auto=format&fit=crop&w=2100&q=80');
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-content {
+    width: 50%;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: var(--dark);
+}
+
+.hero-image {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+/* 3D Cube Animation */
+.cube {
+    width: 250px;
+    height: 250px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate 20s infinite linear;
+}
+
+.face {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--primary);
+    box-shadow: inset 0 0 20px rgba(106, 17, 203, 0.3);
+    background-size: cover;
+    background-position: center;
+}
+
+/* Default images for faces (can be overridden by specific cube rules) */
+.front {
+    transform: translateZ(125px);
+    background-image: url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+.back {
+    transform: rotateY(180deg) translateZ(125px);
+    background-image: url('https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+.right {
+    transform: rotateY(90deg) translateZ(125px);
+    background-image: url('https://images.unsplash.com/photo-1585386959984-a4155224a1ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+.left {
+    transform: rotateY(-90deg) translateZ(125px);
+    background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+.top {
+    transform: rotateX(90deg) translateZ(125px);
+    background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+.bottom {
+    transform: rotateX(-90deg) translateZ(125px);
+    background-image: url('https://images.unsplash.com/photo-1606293459301-be88967fc4af?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+/* Main hero cube specific images */
+#main-cube .front {
+    background-image: url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#main-cube .back {
+    background-image: url('https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#main-cube .right {
+    background-image: url('https://images.unsplash.com/photo-1585386959984-a4155224a1ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#main-cube .left {
+    background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#main-cube .top {
+    background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#main-cube .bottom {
+    background-image: url('https://images.unsplash.com/photo-1606293459301-be88967fc4af?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateY(0) rotateX(0);
+    }
+    100% {
+        transform: rotateY(360deg) rotateX(360deg);
+    }
+}
+
+/* For product cubes, assign specific images to each product */
+/* Headphones with better image and styling */
+#product1 .face {
+    background-image: url('https://images.unsplash.com/photo-1546435770-a3e426bf472b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    border: 3px solid var(--secondary);
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+}
+
+#product1 .cube-small {
+    animation: rotateHeadphones 10s infinite linear;
+}
+
+@keyframes rotateHeadphones {
+    0% {
+        transform: rotateY(0) rotateX(0);
+    }
+    100% {
+        transform: rotateY(360deg) rotateX(90deg);
+    }
+}
+
+/* Smart Watch */
+#product2 .front {
+    background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product2 .back {
+    background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product2 .right {
+    background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product2 .left {
+    background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product2 .top {
+    background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product2 .bottom {
+    background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+/* VR Headset with special styling */
+#product3 .face {
+    background-image: url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    border: 3px solid #2575fc;
+    box-shadow: 0 0 15px rgba(37, 117, 252, 0.6);
+}
+
+#product3 .cube-small {
+    animation: rotateVR 12s infinite ease-in-out;
+}
+
+@keyframes rotateVR {
+    0% {
+        transform: rotateY(0) rotateX(0);
+    }
+    25% {
+        transform: rotateY(90deg) rotateX(45deg);
+    }
+    50% {
+        transform: rotateY(180deg) rotateX(0);
+    }
+    75% {
+        transform: rotateY(270deg) rotateX(-45deg);
+    }
+    100% {
+        transform: rotateY(360deg) rotateX(0);
+    }
+}
+
+/* Bluetooth Speaker */
+#product4 .front {
+    background-image: url('https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product4 .back {
+    background-image: url('https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product4 .right {
+    background-image: url('https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product4 .left {
+    background-image: url('https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product4 .top {
+    background-image: url('https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+#product4 .bottom {
+    background-image: url('https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+}
+
+/* Simplified approach - If you want to use the same image for all faces */
+/* Uncomment and modify these as needed */
+/*
+#main-cube .face {
+    background-image: url('./images/main_product.jpg');
+}
+
+#product1 .face {
+    background-image: url('./images/headphones.jpg');
+}
+
+#product2 .face {
+    background-image: url('./images/watch.jpg');
+}
+
+#product3 .face {
+    background-image: url('./images/vr.jpg');
+}
+
+#product4 .face {
+    background-image: url('./images/speaker.jpg');
+}
+*/
+
+/* Featured Products */
+.featured {
+    padding: 5rem 5%;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow);
+}
+
+.product-image {
+    height: 220px;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+.cube-small {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotateSlow 15s infinite linear;
+}
+
+.cube-small .face {
+    width: 120px;
+    height: 120px;
+}
+
+.cube-small .front {
+    transform: translateZ(60px);
+}
+
+.cube-small .back {
+    transform: rotateY(180deg) translateZ(60px);
+}
+
+.cube-small .right {
+    transform: rotateY(90deg) translateZ(60px);
+}
+
+.cube-small .left {
+    transform: rotateY(-90deg) translateZ(60px);
+}
+
+.cube-small .top {
+    transform: rotateX(90deg) translateZ(60px);
+}
+
+.cube-small .bottom {
+    transform: rotateX(-90deg) translateZ(60px);
+}
+
+@keyframes rotateSlow {
+    0% {
+        transform: rotateY(0) rotateX(0);
+    }
+    100% {
+        transform: rotateY(360deg) rotateX(180deg);
+    }
+}
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-info h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.price {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.rating {
+    color: #ffc107;
+    margin-bottom: 1rem;
+}
+
+.add-to-cart {
+    width: 100%;
+    background: var(--primary-gradient);
+    color: var(--light);
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.add-to-cart:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+}
+
+/* Categories */
+.categories {
+    padding: 5rem 5%;
+    background: linear-gradient(to right, rgba(106, 17, 203, 0.05), rgba(37, 117, 252, 0.05));
+}
+
+.category-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.category-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow);
+}
+
+.category-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+/* Deals Section */
+.deals {
+    padding: 5rem 5%;
+}
+
+.deal-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--primary-gradient);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    color: var(--light);
+}
+
+.deal-content {
+    width: 50%;
+}
+
+.deal-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.deal-content p {
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+}
+
+.deal-content .btn {
+    background: var(--light);
+    color: var(--primary);
+}
+
+.deal-image {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+.prism {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotatePrism 15s infinite linear;
+}
+
+.prism-face {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3);
+    background-size: cover;
+    background-position: center;
+    backface-visibility: visible;
+}
+
+/* Add background images to prism faces */
+.prism-face.front {
+    transform: translateZ(100px);
+    background-image: url('https://images.unsplash.com/photo-1607082350899-7e105aa886ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-color: rgba(255, 50, 50, 0.8);
+}
+
+.prism-face.back {
+    transform: rotateY(180deg) translateZ(100px);
+    background-image: url('https://images.unsplash.com/photo-1572584642822-6f8de0243c93?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-color: rgba(50, 255, 50, 0.8);
+}
+
+.prism-face.right {
+    transform: rotateY(90deg) translateZ(100px);
+    background-image: url('https://images.unsplash.com/photo-1600494603989-9650cf6dad51?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-color: rgba(50, 50, 255, 0.8);
+}
+
+.prism-face.left {
+    transform: rotateY(-90deg) translateZ(100px);
+    background-image: url('https://images.unsplash.com/photo-1607083206968-13611e3d76db?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-color: rgba(255, 255, 50, 0.8);
+}
+
+.prism-face.top {
+    transform: rotateX(90deg) translateZ(100px);
+    background-image: url('https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-color: rgba(255, 50, 255, 0.8);
+}
+
+.prism-face.bottom {
+    transform: rotateX(-90deg) translateZ(100px);
+    background-image: url('https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-color: rgba(50, 255, 255, 0.8);
+}
+
+@keyframes rotatePrism {
+    0% {
+        transform: rotateY(0) rotateX(0);
+    }
+    100% {
+        transform: rotateY(360deg) rotateX(180deg);
+    }
+}
+
+/* Newsletter Section */
+.newsletter {
+    padding: 5rem 5%;
+    background: linear-gradient(to right, rgba(106, 17, 203, 0.05), rgba(37, 117, 252, 0.05));
+}
+
+.newsletter-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.newsletter-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+.newsletter-content p {
+    margin-bottom: 2rem;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.newsletter-form input {
+    flex: 1;
+    min-width: 250px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.newsletter-form input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary);
+}
+
+/* Footer */
+footer {
+    background: var(--dark);
+    color: var(--light);
+    padding: 5rem 5% 2rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.footer-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.footer-section h3::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 2px;
+    background: var(--primary);
+    bottom: -10px;
+    left: 0;
+}
+
+.footer-section p {
+    margin-bottom: 1.5rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.social-icons a:hover {
+    background: var(--primary);
+    transform: translateY(-5px);
+}
+
+.footer-section ul li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-section ul li a {
+    transition: var(--transition);
+}
+
+.footer-section ul li a:hover {
+    color: var(--primary);
+    padding-left: 5px;
+}
+
+.contact-info li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.payment-methods {
+    display: flex;
+    gap: 1rem;
+    font-size: 2rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Design - Enhanced for all devices */
+@media (max-width: 1400px) {
+    .hero-content h1 {
+        font-size: 3.2rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .hero-content h1 {
+        font-size: 3rem;
+    }
+    
+    .cube {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .face {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .front {
+        transform: translateZ(100px);
+    }
+    
+    .back {
+        transform: rotateY(180deg) translateZ(100px);
+    }
+    
+    .right {
+        transform: rotateY(90deg) translateZ(100px);
+    }
+    
+    .left {
+        transform: rotateY(-90deg) translateZ(100px);
+    }
+    
+    .top {
+        transform: rotateX(90deg) translateZ(100px);
+    }
+    
+    .bottom {
+        transform: rotateX(-90deg) translateZ(100px);
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    html {
+        font-size: 95%;
+    }
+    
+    header {
+        padding: 1rem 5%;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background: var(--light);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        z-index: 1001;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-links li {
+        margin: 1.5rem 0;
+    }
+    
+    .nav-links.active {
+        right: 0;
+    }
+    
+    .menu-btn {
+        display: block;
+        z-index: 1002;
+    }
+    
+    .hero {
+        flex-direction: column;
+        padding: 3rem 5%;
+        text-align: center;
+        gap: 2rem;
+    }
+    
+    .hero-content, .hero-image, .deal-content, .deal-image {
+        width: 100%;
+    }
+    
+    .hero-content {
+        margin-bottom: 2rem;
+    }
+    
+    .deal-container {
+        flex-direction: column;
+        padding: 2rem;
+    }
+    
+    .deal-content {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .featured, .categories, .deals, .newsletter {
+        padding: 4rem 5%;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 90%;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .product-grid, .category-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+    
+    .newsletter-form {
+        flex-direction: column;
+    }
+    
+    .newsletter-form input {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .newsletter-form .btn {
+        width: 100%;
+    }
+    
+    .cube-small {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .cube-small .face {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .cube-small .front {
+        transform: translateZ(50px);
+    }
+    
+    .cube-small .back {
+        transform: rotateY(180deg) translateZ(50px);
+    }
+    
+    .cube-small .right {
+        transform: rotateY(90deg) translateZ(50px);
+    }
+    
+    .cube-small .left {
+        transform: rotateY(-90deg) translateZ(50px);
+    }
+    
+    .cube-small .top {
+        transform: rotateX(90deg) translateZ(50px);
+    }
+    
+    .cube-small .bottom {
+        transform: rotateX(-90deg) translateZ(50px);
+    }
+}
+
+@media (max-width: 576px) {
+    html {
+        font-size: 85%;
+    }
+    
+    .logo h1 {
+        font-size: 1.5rem;
+    }
+    
+    .nav-icons {
+        gap: 1rem;
+    }
+    
+    .icon {
+        font-size: 1.1rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .product-grid, .category-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .cube {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .face {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .front {
+        transform: translateZ(75px);
+    }
+    
+    .back {
+        transform: rotateY(180deg) translateZ(75px);
+    }
+    
+    .right {
+        transform: rotateY(90deg) translateZ(75px);
+    }
+    
+    .left {
+        transform: rotateY(-90deg) translateZ(75px);
+    }
+    
+    .top {
+        transform: rotateX(90deg) translateZ(75px);
+    }
+    
+    .bottom {
+        transform: rotateX(-90deg) translateZ(75px);
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .prism {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .prism-face {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .prism-face.front {
+        transform: translateZ(75px);
+    }
+    
+    .prism-face.back {
+        transform: rotateY(180deg) translateZ(75px);
+    }
+    
+    .prism-face.right {
+        transform: rotateY(90deg) translateZ(75px);
+    }
+    
+    .prism-face.left {
+        transform: rotateY(-90deg) translateZ(75px);
+    }
+    
+    .prism-face.top {
+        transform: rotateX(90deg) translateZ(75px);
+    }
+    
+    .prism-face.bottom {
+        transform: rotateX(-90deg) translateZ(75px);
+    }
+    
+    .featured, .categories, .deals, .newsletter {
+        padding: 3rem 5%;
+    }
+}
+
+@media (max-width: 400px) {
+    html {
+        font-size: 80%;
+    }
+    
+    header {
+        padding: 0.8rem 4%;
+    }
+    
+    .logo h1 {
+        font-size: 1.3rem;
+    }
+    
+    .nav-icons {
+        gap: 0.8rem;
+    }
+    
+    .icon {
+        font-size: 1rem;
+    }
+    
+    .cube {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .face {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .front {
+        transform: translateZ(60px);
+    }
+    
+    .back {
+        transform: rotateY(180deg) translateZ(60px);
+    }
+    
+    .right {
+        transform: rotateY(90deg) translateZ(60px);
+    }
+    
+    .left {
+        transform: rotateY(-90deg) translateZ(60px);
+    }
+    
+    .top {
+        transform: rotateX(90deg) translateZ(60px);
+    }
+    
+    .bottom {
+        transform: rotateX(-90deg) translateZ(60px);
+    }
+    
+    .product-image {
+        height: 180px;
+    }
+    
+    .cube-small {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .cube-small .face {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .cube-small .front {
+        transform: translateZ(40px);
+    }
+    
+    .cube-small .back {
+        transform: rotateY(180deg) translateZ(40px);
+    }
+    
+    .cube-small .right {
+        transform: rotateY(90deg) translateZ(40px);
+    }
+    
+    .cube-small .left {
+        transform: rotateY(-90deg) translateZ(40px);
+    }
+    
+    .cube-small .top {
+        transform: rotateX(90deg) translateZ(40px);
+    }
+    
+    .cube-small .bottom {
+        transform: rotateX(-90deg) translateZ(40px);
+    }
+    
+    .add-to-cart {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+    }
+} 
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>3D<span>Store</span></h1>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#deals">Deals</a></li>
+            </ul>
+        </nav>
+        <div class="nav-icons">
+            <a href="#" class="icon"><i class="fas fa-search"></i></a>
+            <a href="#" class="icon"><i class="fas fa-shopping-cart"></i></a>
+            <a href="#" class="icon"><i class="fas fa-user"></i></a>
+        </div>
+        <div class="menu-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Future of Shopping</h1>
+            <p>Experience products in 3D before you buy</p>
+            <a href="#products" class="btn">Shop Now</a>
+        </div>
+        <div class="hero-image">
+            <div id="main-cube" class="cube">
+                <div class="face front"></div>
+                <div class="face back"></div>
+                <div class="face right"></div>
+                <div class="face left"></div>
+                <div class="face top"></div>
+                <div class="face bottom"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="featured" class="featured">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <div id="product1" class="cube-small">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face right"></div>
+                        <div class="face left"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>3D Wireless Headphones</h3>
+                    <p class="price">$199.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <div id="product2" class="cube-small">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face right"></div>
+                        <div class="face left"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>Smart Watch Pro</h3>
+                    <p class="price">$249.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <div id="product3" class="cube-small">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face right"></div>
+                        <div class="face left"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>VR Gaming Headset</h3>
+                    <p class="price">$399.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <div id="product4" class="cube-small">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face right"></div>
+                        <div class="face left"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>Bluetooth Speaker</h3>
+                    <p class="price">$129.99</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="categories">
+        <h2 class="section-title">Shop by Categories</h2>
+        <div class="category-container">
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-laptop"></i>
+                </div>
+                <h3>Electronics</h3>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <h3>Fashion</h3>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3>Home & Living</h3>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3>Gaming</h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="deals" class="deals">
+        <div class="deal-container">
+            <div class="deal-content">
+                <h2>Flash Sale</h2>
+                <p>Up to 50% off on selected items</p>
+                <a href="#" class="btn">Shop Now</a>
+            </div>
+            <div class="deal-image">
+                <div class="prism">
+                    <div class="prism-face front"></div>
+                    <div class="prism-face back"></div>
+                    <div class="prism-face right"></div>
+                    <div class="prism-face left"></div>
+                    <div class="prism-face top"></div>
+                    <div class="prism-face bottom"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="newsletter-content">
+            <h2>Join Our Newsletter</h2>
+            <p>Get the latest updates on new products and special deals</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email">
+                <button type="submit" class="btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>3DStore</h3>
+                <p>Experience shopping in a whole new dimension.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#categories">Categories</a></li>
+                    <li><a href="#deals">Deals</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Digital Avenue, Tech City</li>
+                    <li><i class="fas fa-phone"></i> +1-234-567-8900</li>
+                    <li><i class="fas fa-envelope"></i> info@3dstore.com</li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>We Accept</h3>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-paypal"></i>
+                    <i class="fab fa-cc-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 3DStore. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
